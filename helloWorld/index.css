@@ -50,3 +50,34 @@
 .res-card .res-logo img {
   width: 100%;
 }
+.filter .filter-btn {
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #057fc0;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  margin: 10px 0 !important;
+  cursor: pointer;
+}
+.filter .filter-btn:hover {
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: green;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  margin: 10px 0 !important;
+}
+.filter .filter-btn:focus {
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: purple;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  margin: 10px 0 !important;
+}
