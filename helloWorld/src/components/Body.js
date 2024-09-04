@@ -1,13 +1,16 @@
-import RestrauntCard from "./Restraunt";
+import RestrauntCard, { withPromotedLabel } from "./Restraunt";
 import resObj from "../utils/mockData";
 import Shimmer from "./Shimmer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "./../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [resList, setresList] = useState([]);
   const [searchtxt, setSearchtxt] = useState("");
   const [filteredResList, setFilteredResList] = useState([]);
+  const { loggedInUser, setUserName } = useContext(UserContext);
   const getTopRestraunt = () => {
     console.log("filtering");
     let filteredList = resList.filter((item) => {
@@ -16,6 +19,7 @@ const Body = () => {
     setresList(filteredList);
   };
 
+  const PromotedRestrauntCard = withPromotedLabel(RestrauntCard);
   useEffect(() => {
     fetchData();
   }, []);
@@ -37,23 +41,29 @@ const Body = () => {
       data?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
+  const onlineStatus = useOnlineStatus();
+  if (!onlineStatus)
+    return (
+      <h1>Looks like you are offline. Please check your Internet Connection</h1>
+    );
   if (resList.length === 0) {
     return <Shimmer />;
   }
   return (
-    <div className="body">
-      <div className="filter">
-        <div className="search">
+    <div className="body bg-white">
+      <div className="filter flex">
+        <div className="search m-4 p-4">
           <input
             type="text"
-            className="search-box"
+            className="border border-solid border-black p-1 rounded-sm"
             value={searchtxt}
             onChange={(event) => {
               setSearchtxt(event.target.value);
             }}
           ></input>
+
           <button
-            className="filter-btn"
+            className="bg-green-100 px-4 m-4 py-2 radius rounded"
             onClick={() => {
               const filteredList = resList.filter((res) =>
                 res.info.name.toLowerCase().includes(searchtxt.toLowerCase())
@@ -64,16 +74,35 @@ const Body = () => {
             Search
           </button>
         </div>
-
-        <button className="filter-btn" onClick={getTopRestraunt}>
-          Top Rated Restraunt{" "}
-        </button>
+        <div className="m-4 p-4 flex items-center ">
+          <button
+            className="bg-sky-700 px-4 py-2 rounded text-white"
+            onClick={getTopRestraunt}
+          >
+            Top Rated Restraunt{" "}
+          </button>
+        </div>
+        <div className="m-4 p-4 flex items-center ">
+          <label className="m-1">User Name</label>
+          <input
+            type="text"
+            className="border border-solid border-black p-1 rounded-sm"
+            value={loggedInUser}
+            onChange={(event) => {
+              setUserName(event.target.value);
+            }}
+          ></input>
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap justify-center items-stretch">
         {filteredResList.map((res) => {
           return (
             <Link key={res.info.id} to={"/restraunts/" + res.info.id}>
-              <RestrauntCard resdata={res} />
+              {res.info.isOpen ? (
+                <PromotedRestrauntCard resdata={res} />
+              ) : (
+                <RestrauntCard resdata={res} />
+              )}
             </Link>
           );
         })}

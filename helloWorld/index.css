@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0 !important;
 }
 
@@ -88,3 +88,11 @@
   padding: 12px;
   cursor: pointer;
 }
+.user-card {
+  border: 1px solid #171717;
+  padding: 40px 32px;
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
